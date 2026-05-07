@@ -1,6 +1,5 @@
-import type { Route } from "./+types/home";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Shartinary - Sharing Itinerary" },
     { name: "description", content: "Platform Sharing Itinerary #1 Indonesia" },
