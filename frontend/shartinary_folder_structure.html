@@ -1,0 +1,359 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-mono); }
+.root { padding: 16px 0; }
+.tree { list-style: none; }
+.tree li { position: relative; }
+.entry { display: flex; align-items: center; gap: 8px; padding: 3px 0 3px 0; cursor: pointer; border-radius: 6px; transition: background .15s; }
+.entry:hover { background: var(--color-background-secondary); }
+.entry .icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+.entry .name { font-size: 13px; color: var(--color-text-primary); font-weight: 500; }
+.entry .badge { font-size: 11px; padding: 1px 7px; border-radius: 20px; margin-left: 6px; font-weight: 500; flex-shrink: 0; }
+.badge-page   { background: #FFF0E6; color: #C45E00; }
+.badge-comp   { background: #E8F5E9; color: #2E7D32; }
+.badge-hook   { background: #EDE7F6; color: #512DA8; }
+.badge-store  { background: #E3F2FD; color: #1565C0; }
+.badge-api    { background: #FFF8E1; color: #F57F17; }
+.badge-util   { background: #F1F8E9; color: #558B2F; }
+.badge-type   { background: #FCE4EC; color: #880E4F; }
+.entry .desc  { font-size: 11px; color: var(--color-text-tertiary); margin-left: auto; padding-right: 8px; font-family: var(--font-sans); }
+.children { padding-left: 22px; border-left: 1.5px solid var(--color-border-tertiary); margin-left: 9px; }
+.collapsed > .children { display: none; }
+.chevron { font-size: 10px; color: var(--color-text-tertiary); margin-left: auto; padding-right: 4px; transition: transform .2s; flex-shrink: 0; }
+.expanded .chevron { transform: rotate(90deg); }
+.file-entry { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+.file-entry .icon { font-size: 12px; width: 18px; text-align: center; flex-shrink: 0; color: var(--color-text-tertiary); }
+.file-entry .name { font-size: 12px; color: var(--color-text-secondary); }
+.file-entry .badge { font-size: 10px; padding: 1px 6px; border-radius: 20px; font-weight: 500; flex-shrink: 0; }
+.file-entry .desc { font-size: 11px; color: var(--color-text-tertiary); margin-left: auto; padding-right: 8px; font-family: var(--font-sans); }
+.section-label { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-tertiary); padding: 10px 0 4px 0; font-family: var(--font-sans); }
+</style>
+
+<div class="root">
+  <div style="display:flex;align-items:center;gap:10px;padding:0 0 12px 0;border-bottom:1px solid var(--color-border-tertiary);margin-bottom:12px">
+    <span style="font-size:22px">✈️</span>
+    <div>
+      <div style="font-size:15px;font-weight:600;color:var(--color-text-primary);font-family:var(--font-sans)">shartinary/</div>
+      <div style="font-size:12px;color:var(--color-text-tertiary);font-family:var(--font-sans)">React + Vite · Tailwind CSS · React Query · Zustand</div>
+    </div>
+    <div style="margin-left:auto;font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-sans)">Klik folder untuk expand</div>
+  </div>
+
+  <ul class="tree" id="tree"></ul>
+</div>
+
+<script>
+const data = [
+  { type:'file', icon:'⚙️', name:'vite.config.js', desc:'path alias @/ dsb' },
+  { type:'file', icon:'⚙️', name:'tailwind.config.js', desc:'brand colors, custom tokens' },
+  { type:'file', icon:'⚙️', name:'.env.example', desc:'VITE_API_BASE_URL, dsb' },
+  { type:'file', icon:'📄', name:'index.html', desc:'root mount point' },
+  {
+    type:'folder', icon:'📁', name:'public/', desc:'static assets',
+    children:[
+      { type:'file', icon:'🖼️', name:'og-image.jpg', desc:'Open Graph preview' },
+      { type:'file', icon:'🖼️', name:'favicon.svg' },
+    ]
+  },
+  {
+    type:'folder', icon:'📁', name:'src/', desc:'semua source code',
+    open: true,
+    children:[
+      { type:'file', icon:'⚛️', name:'main.jsx', desc:'ReactDOM.createRoot, providers' },
+      { type:'file', icon:'⚛️', name:'App.jsx', desc:'router + layout wrapper' },
+      {
+        type:'folder', icon:'📁', name:'assets/', desc:'fonts, icons, ilustrasi',
+        children:[
+          { type:'file', icon:'🖼️', name:'logo.svg' },
+          { type:'file', icon:'🖼️', name:'hero-illustration.svg' },
+          { type:'folder', icon:'📁', name:'fonts/', children:[] },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'styles/', desc:'global CSS, design tokens',
+        children:[
+          { type:'file', icon:'🎨', name:'index.css', desc:'Tailwind directives, resets' },
+          { type:'file', icon:'🎨', name:'tokens.css', desc:'--color-brand-orange, dsb' },
+          { type:'file', icon:'🎨', name:'animations.css', desc:'keyframes global' },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'routes/', desc:'definisi routing',
+        children:[
+          { type:'file', icon:'⚛️', name:'index.jsx', desc:'createBrowserRouter' },
+          { type:'file', icon:'⚛️', name:'ProtectedRoute.jsx', desc:'guard auth' },
+          { type:'file', icon:'⚛️', name:'GuestRoute.jsx', desc:'redirect jika sudah login' },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'pages/', desc:'satu file = satu halaman/route',
+        open: true,
+        children:[
+          {
+            type:'folder', icon:'📁', name:'auth/', desc:'',
+            children:[
+              { type:'file', icon:'📄', name:'LoginPage.jsx', badge:'page' },
+              { type:'file', icon:'📄', name:'RegisterPage.jsx', badge:'page' },
+              { type:'file', icon:'📄', name:'ForgotPasswordPage.jsx', badge:'page' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'home/', children:[
+              { type:'file', icon:'📄', name:'HomePage.jsx', badge:'page', desc:'landing + hero' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'explore/', children:[
+              { type:'file', icon:'📄', name:'ExplorePage.jsx', badge:'page', desc:'discover itinerary publik' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'itinerary/', children:[
+              { type:'file', icon:'📄', name:'ItineraryListPage.jsx', badge:'page', desc:'itinerary milik saya' },
+              { type:'file', icon:'📄', name:'ItineraryDetailPage.jsx', badge:'page', desc:'detail + hari + tempat' },
+              { type:'file', icon:'📄', name:'ItineraryCreatePage.jsx', badge:'page', desc:'form buat baru' },
+              { type:'file', icon:'📄', name:'ItineraryEditPage.jsx', badge:'page' },
+              { type:'file', icon:'📄', name:'ItineraryForkedPage.jsx', badge:'page', desc:'hasil fork dari orang lain' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'budget/', children:[
+              { type:'file', icon:'📄', name:'BudgetPage.jsx', badge:'page', desc:'alokasi & expense per itinerary' },
+              { type:'file', icon:'📄', name:'BudgetSplitPage.jsx', badge:'page', desc:'split cost antar member' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'review/', children:[
+              { type:'file', icon:'📄', name:'ReviewPage.jsx', badge:'page', desc:'review per itinerary' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'profile/', children:[
+              { type:'file', icon:'📄', name:'ProfilePage.jsx', badge:'page', desc:'profil user lain' },
+              { type:'file', icon:'📄', name:'MyProfilePage.jsx', badge:'page', desc:'profil & setting sendiri' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'notifications/', children:[
+              { type:'file', icon:'📄', name:'NotificationsPage.jsx', badge:'page' },
+            ]
+          },
+          { type:'file', icon:'📄', name:'NotFoundPage.jsx', badge:'page' },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'components/', desc:'reusable UI, dibagi per domain',
+        open: true,
+        children:[
+          {
+            type:'folder', icon:'📁', name:'ui/', desc:'atom & molekul generik',
+            children:[
+              { type:'file', icon:'🧩', name:'Button.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'Input.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'Modal.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'Drawer.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'Badge.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'Avatar.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'Skeleton.jsx', badge:'comp', desc:'loading state' },
+              { type:'file', icon:'🧩', name:'Toast.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'Tabs.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'Dropdown.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'EmptyState.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'Spinner.jsx', badge:'comp' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'layout/', desc:'struktur halaman',
+            children:[
+              { type:'file', icon:'🧩', name:'AppLayout.jsx', badge:'comp', desc:'sidebar + topbar utama' },
+              { type:'file', icon:'🧩', name:'AuthLayout.jsx', badge:'comp', desc:'layout halaman login/register' },
+              { type:'file', icon:'🧩', name:'Topbar.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'Sidebar.jsx', badge:'comp', desc:'desktop nav' },
+              { type:'file', icon:'🧩', name:'BottomNav.jsx', badge:'comp', desc:'mobile nav' },
+              { type:'file', icon:'🧩', name:'PageWrapper.jsx', badge:'comp', desc:'padding, max-width' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'itinerary/', desc:'komponen khusus itinerary',
+            children:[
+              { type:'file', icon:'🧩', name:'ItineraryCard.jsx', badge:'comp', desc:'card di explore/list' },
+              { type:'file', icon:'🧩', name:'ItineraryCardSkeleton.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'ItineraryDayAccordion.jsx', badge:'comp', desc:'expand hari per hari' },
+              { type:'file', icon:'🧩', name:'PlaceItem.jsx', badge:'comp', desc:'satu baris destinasi/hotel' },
+              { type:'file', icon:'🧩', name:'PackingList.jsx', badge:'comp', desc:'checklist perlengkapan' },
+              { type:'file', icon:'🧩', name:'CollaboratorList.jsx', badge:'comp', desc:'daftar member itinerary' },
+              { type:'file', icon:'🧩', name:'ForkButton.jsx', badge:'comp', desc:'tombol ikut/fork itinerary' },
+              { type:'file', icon:'🧩', name:'ItineraryStats.jsx', badge:'comp', desc:'followers, hari, budget total' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'budget/', children:[
+              { type:'file', icon:'🧩', name:'BudgetSummaryCard.jsx', badge:'comp', desc:'total vs sisa budget' },
+              { type:'file', icon:'🧩', name:'CategoryBar.jsx', badge:'comp', desc:'progress bar per kategori' },
+              { type:'file', icon:'🧩', name:'ExpenseItem.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'AddExpenseForm.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'SplitSummary.jsx', badge:'comp', desc:'siapa utang ke siapa' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'review/', children:[
+              { type:'file', icon:'🧩', name:'ReviewCard.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'StarRating.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'ReviewForm.jsx', badge:'comp' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'profile/', children:[
+              { type:'file', icon:'🧩', name:'UserCard.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'FollowButton.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'ItineraryGrid.jsx', badge:'comp', desc:'grid itinerary di profil' },
+            ]
+          },
+          {
+            type:'folder', icon:'📁', name:'explore/', children:[
+              { type:'file', icon:'🧩', name:'SearchBar.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'FilterPanel.jsx', badge:'comp', desc:'filter budget, durasi, tag' },
+              { type:'file', icon:'🧩', name:'TagChip.jsx', badge:'comp' },
+              { type:'file', icon:'🧩', name:'TrendingSection.jsx', badge:'comp' },
+            ]
+          },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'hooks/', desc:'custom hooks per domain',
+        children:[
+          { type:'file', icon:'🪝', name:'useAuth.js', badge:'hook', desc:'user saat ini, login, logout' },
+          { type:'file', icon:'🪝', name:'useItinerary.js', badge:'hook', desc:'CRUD + fork itinerary' },
+          { type:'file', icon:'🪝', name:'useBudget.js', badge:'hook', desc:'expense, split, kategori' },
+          { type:'file', icon:'🪝', name:'useReview.js', badge:'hook' },
+          { type:'file', icon:'🪝', name:'useProfile.js', badge:'hook', desc:'follow, profil user' },
+          { type:'file', icon:'🪝', name:'useExplore.js', badge:'hook', desc:'search, filter, infinite scroll' },
+          { type:'file', icon:'🪝', name:'useNotifications.js', badge:'hook' },
+          { type:'file', icon:'🪝', name:'useMediaUpload.js', badge:'hook', desc:'upload foto ke S3' },
+          { type:'file', icon:'🪝', name:'useDebounce.js', badge:'hook' },
+          { type:'file', icon:'🪝', name:'useInfiniteScroll.js', badge:'hook' },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'store/', desc:'Zustand global state',
+        children:[
+          { type:'file', icon:'📦', name:'authStore.js', badge:'store', desc:'user, token, isAuthenticated' },
+          { type:'file', icon:'📦', name:'uiStore.js', badge:'store', desc:'modal, toast, sidebar open' },
+          { type:'file', icon:'📦', name:'itineraryDraftStore.js', badge:'store', desc:'form create/edit in progress' },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'api/', desc:'semua HTTP call ke Laravel backend',
+        children:[
+          { type:'file', icon:'🔌', name:'client.js', badge:'api', desc:'axios instance, interceptors, token' },
+          { type:'file', icon:'🔌', name:'auth.api.js', badge:'api', desc:'login, register, logout, refresh' },
+          { type:'file', icon:'🔌', name:'itinerary.api.js', badge:'api', desc:'CRUD, fork, follow' },
+          { type:'file', icon:'🔌', name:'budget.api.js', badge:'api', desc:'expense, split, kategori' },
+          { type:'file', icon:'🔌', name:'review.api.js', badge:'api' },
+          { type:'file', icon:'🔌', name:'user.api.js', badge:'api', desc:'profil, follow, search user' },
+          { type:'file', icon:'🔌', name:'explore.api.js', badge:'api', desc:'search, filter, trending' },
+          { type:'file', icon:'🔌', name:'upload.api.js', badge:'api', desc:'presigned URL + S3 upload' },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'lib/', desc:'wrapper library pihak ketiga',
+        children:[
+          { type:'file', icon:'📚', name:'queryClient.js', desc:'React Query config' },
+          { type:'file', icon:'📚', name:'axios.js', desc:'base setup axios' },
+          { type:'file', icon:'📚', name:'dayjs.js', desc:'locale ID, format helpers' },
+          { type:'file', icon:'📚', name:'currency.js', desc:'format IDR/USD dsb' },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'utils/', desc:'pure functions, tidak ada side effect',
+        children:[
+          { type:'file', icon:'🔧', name:'formatDate.js', badge:'util' },
+          { type:'file', icon:'🔧', name:'formatCurrency.js', badge:'util', desc:'IDR, USD, dll' },
+          { type:'file', icon:'🔧', name:'calcBudget.js', badge:'util', desc:'total, sisa, per orang' },
+          { type:'file', icon:'🔧', name:'generateSlug.js', badge:'util' },
+          { type:'file', icon:'🔧', name:'getInitials.js', badge:'util', desc:'untuk avatar fallback' },
+          { type:'file', icon:'🔧', name:'cn.js', badge:'util', desc:'clsx + tailwind-merge helper' },
+          { type:'file', icon:'🔧', name:'validators.js', badge:'util', desc:'validasi form itinerary dsb' },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'types/', desc:'PropTypes / JSDoc type definitions',
+        children:[
+          { type:'file', icon:'📐', name:'itinerary.types.js', badge:'type' },
+          { type:'file', icon:'📐', name:'budget.types.js', badge:'type' },
+          { type:'file', icon:'📐', name:'user.types.js', badge:'type' },
+          { type:'file', icon:'📐', name:'review.types.js', badge:'type' },
+        ]
+      },
+      {
+        type:'folder', icon:'📁', name:'constants/', desc:'nilai tetap, tidak pernah berubah',
+        children:[
+          { type:'file', icon:'📌', name:'routes.js', desc:'ROUTES.HOME, ROUTES.EXPLORE dsb' },
+          { type:'file', icon:'📌', name:'queryKeys.js', desc:'React Query cache keys' },
+          { type:'file', icon:'📌', name:'budgetCategories.js', desc:'accommodation, transport, dsb' },
+          { type:'file', icon:'📌', name:'itineraryStatus.js', desc:'draft, published, archived' },
+        ]
+      },
+    ]
+  }
+];
+
+function badge(b) {
+  if (!b) return '';
+  return `<span class="badge badge-${b}">${b}</span>`;
+}
+
+function renderFile(item, pad=0) {
+  const el = document.createElement('li');
+  el.style.paddingLeft = pad+'px';
+  el.innerHTML = `<div class="file-entry">
+    <span class="icon">${item.icon||'📄'}</span>
+    <span class="name">${item.name}</span>
+    ${badge(item.badge)}
+    ${item.desc ? `<span class="desc">${item.desc}</span>` : ''}
+  </div>`;
+  return el;
+}
+
+function renderFolder(item, depth=0) {
+  const li = document.createElement('li');
+  const isOpen = item.open || false;
+  li.className = isOpen ? 'expanded' : 'collapsed';
+
+  const entry = document.createElement('div');
+  entry.className = 'entry';
+  entry.innerHTML = `
+    <span class="icon">${item.icon}</span>
+    <span class="name" style="color:${depth===0?'var(--color-text-primary)':'var(--color-text-primary)'};font-weight:${depth===0?600:500}">${item.name}</span>
+    ${item.desc ? `<span class="badge" style="background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:10px;padding:1px 7px;border-radius:20px">${item.desc}</span>` : ''}
+    <span class="chevron">›</span>
+  `;
+
+  entry.addEventListener('click', () => {
+    li.classList.toggle('expanded');
+    li.classList.toggle('collapsed');
+  });
+
+  const childrenEl = document.createElement('ul');
+  childrenEl.className = 'tree children';
+
+  (item.children||[]).forEach(child => {
+    if (child.type === 'folder') {
+      childrenEl.appendChild(renderFolder(child, depth+1));
+    } else {
+      childrenEl.appendChild(renderFile(child));
+    }
+  });
+
+  li.appendChild(entry);
+  li.appendChild(childrenEl);
+  return li;
+}
+
+const tree = document.getElementById('tree');
+data.forEach(item => {
+  if (item.type === 'folder') tree.appendChild(renderFolder(item, 0));
+  else tree.appendChild(renderFile(item));
+});
+</script>

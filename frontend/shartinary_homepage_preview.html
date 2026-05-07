@@ -1,0 +1,668 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#fff;color:#111}
+.line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+a{text-decoration:none;color:inherit}
+input{font-family:inherit}
+
+/* Navbar */
+.topbar{background:#f97316;color:#fff;font-size:11px;text-align:center;padding:6px 16px;font-weight:500;letter-spacing:.02em}
+.navbar{background:#fff;border-bottom:1px solid #f3f4f6;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(249,115,22,.08)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo-icon{width:36px;height:36px;background:#f97316;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(249,115,22,.3)}
+.logo-text{font-size:17px;font-weight:800;color:#111;letter-spacing:-.02em}
+.logo-sub{font-size:9px;color:#f97316;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.nav-menus{display:flex;align-items:center;gap:2px}
+.nav-item{position:relative}
+.nav-btn{display:flex;align-items:center;gap:5px;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:500;color:#4b5563;cursor:pointer;border:none;background:none;transition:all .15s}
+.nav-btn:hover,.nav-btn.active{background:#fff7ed;color:#ea580c}
+.nav-dropdown{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);width:270px;background:#fff;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);border:1px solid #f3f4f6;padding:8px;z-index:100}
+.nav-dropdown-item{display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:10px;transition:background .12s;cursor:pointer}
+.nav-dropdown-item:hover{background:#fff7ed}
+.dd-icon{width:30px;height:30px;background:#fff7ed;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.dd-dot{width:7px;height:7px;background:#fb923c;border-radius:50%}
+.dd-label{font-size:13px;font-weight:600;color:#1f2937}
+.dd-desc{font-size:11px;color:#9ca3af;margin-top:2px}
+.nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.btn-ghost{font-size:13px;font-weight:500;color:#4b5563;padding:8px 14px;border-radius:8px;border:none;background:none;cursor:pointer;transition:all .15s}
+.btn-ghost:hover{background:#fff7ed;color:#ea580c}
+.btn-primary{display:flex;align-items:center;gap:6px;background:#f97316;color:#fff;font-size:13px;font-weight:600;padding:9px 18px;border-radius:10px;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(249,115,22,.3);transition:all .15s}
+.btn-primary:hover{background:#ea580c;box-shadow:0 4px 16px rgba(249,115,22,.4)}
+
+/* Greeting */
+.greeting-bar{background:#fff7ed;border-bottom:1px solid #fed7aa;padding:10px 24px;display:flex;align-items:center;justify-content:space-between}
+.greeting-inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+.greeting-link{font-size:12px;font-weight:600;color:#ea580c;display:flex;align-items:center;gap:4px}
+
+/* Hero */
+.hero{max-width:1200px;margin:0 auto;padding:48px 24px 64px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:#fff7ed;border:1px solid #fed7aa;color:#c2410c;font-size:11px;font-weight:600;padding:6px 14px;border-radius:20px;margin-bottom:20px}
+.badge-dot{width:7px;height:7px;background:#f97316;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.hero h1{font-size:44px;font-weight:900;color:#111;line-height:1.1;letter-spacing:-.02em;margin-bottom:20px}
+.hero-accent{color:#f97316;position:relative;display:inline-block}
+.hero p{color:#6b7280;font-size:16px;line-height:1.7;margin-bottom:28px;max-width:480px}
+.search-box{display:flex;gap:8px;margin-bottom:20px}
+.search-input{flex:1;display:flex;align-items:center;gap:10px;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:14px;padding:12px 16px;transition:all .2s}
+.search-input:focus-within{border-color:#fb923c;background:#fff}
+.search-input input{flex:1;background:none;border:none;outline:none;font-size:14px;color:#374151}
+.search-input input::placeholder{color:#9ca3af}
+.search-btn{background:#f97316;color:#fff;font-weight:600;font-size:14px;padding:12px 24px;border-radius:14px;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(249,115,22,.3);transition:all .15s;flex-shrink:0}
+.search-btn:hover{background:#ea580c}
+.quick-tags{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tag-label{font-size:12px;color:#9ca3af}
+.tag-chip{font-size:12px;color:#374151;background:#f3f4f6;padding:6px 14px;border-radius:20px;font-weight:500;cursor:pointer;transition:all .15s}
+.tag-chip:hover{background:#fff7ed;color:#ea580c}
+
+/* Hero visual card */
+.hero-visual{position:relative}
+.hero-card{background:#fff;border-radius:24px;box-shadow:0 24px 48px rgba(0,0,0,.1);border:1px solid #f3f4f6;padding:18px;margin-left:24px}
+.card-cover{background:linear-gradient(135deg,#f97316,#fbbf24);border-radius:16px;height:160px;position:relative;overflow:hidden;margin-bottom:14px;display:flex;align-items:flex-end;padding:12px}
+.card-cover-emoji{position:absolute;top:10px;right:14px;font-size:60px;opacity:.2}
+.card-cover-info{background:rgba(255,255,255,.2);backdrop-filter:blur(4px);border-radius:10px;padding:8px 12px;width:100%}
+.card-cover-info p{color:#fff;font-weight:700;font-size:13px}
+.card-cover-info span{color:rgba(255,255,255,.75);font-size:11px}
+.card-rating{position:absolute;top:10px;left:12px;background:rgba(255,255,255,.9);font-size:11px;font-weight:600;color:#d97706;padding:4px 10px;border-radius:20px}
+.card-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.card-stat{background:#fff7ed;border-radius:10px;padding:8px;text-align:center}
+.card-stat-val{font-size:14px;font-weight:700;color:#ea580c}
+.card-stat-lbl{font-size:10px;color:#9ca3af}
+.card-avatars{display:flex;align-items:center;gap:8px}
+.avatar-stack{display:flex}
+.avatar-item{width:26px;height:26px;background:linear-gradient(135deg,#f97316,#fb7185);border-radius:8px;border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;margin-left:-6px}
+.avatar-item:first-child{margin-left:0}
+.avatar-text{font-size:11px;color:#6b7280}
+.float-badge1{position:absolute;top:-12px;left:0;background:#f97316;color:#fff;border-radius:14px;padding:8px 14px;box-shadow:0 8px 16px rgba(249,115,22,.3)}
+.float-badge1 .b1-label{font-size:10px;font-weight:600;opacity:.9}
+.float-badge1 .b1-val{font-size:18px;font-weight:800}
+.float-badge2{position:absolute;bottom:-12px;right:8px;background:#fff;border:1px solid #f3f4f6;border-radius:14px;padding:10px 14px;box-shadow:0 8px 16px rgba(0,0,0,.08);display:flex;align-items:center;gap:10px}
+.badge2-icon{width:32px;height:32px;background:#dcfce7;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.badge2-label{font-size:10px;color:#6b7280}
+.badge2-val{font-size:13px;font-weight:700;color:#1f2937}
+
+/* Stats bar */
+.stats-bar{background:#f97316}
+.stats-inner{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stat-item{text-align:center}
+.stat-val{font-size:28px;font-weight:900;color:#fff}
+.stat-lbl{font-size:13px;color:rgba(255,255,255,.8);margin-top:4px}
+
+/* Sections */
+.section{padding:56px 0}
+.section-inner{max-width:1200px;margin:0 auto;padding:0 24px}
+.section-bg-gray{background:#f9fafb}
+.section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px}
+.section-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.section-bar{width:4px;height:20px;background:#f97316;border-radius:4px}
+.section-tag{font-size:11px;font-weight:700;color:#f97316;letter-spacing:.1em;text-transform:uppercase}
+.section-title{font-size:28px;font-weight:900;color:#111;letter-spacing:-.02em}
+.section-sub{font-size:13px;color:#6b7280;margin-top:4px}
+.see-all{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#f97316}
+
+/* Itinerary cards grid */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.itin-card{background:#fff;border-radius:18px;border:1px solid #f3f4f6;overflow:hidden;transition:all .2s;cursor:pointer}
+.itin-card:hover{border-color:#fed7aa;box-shadow:0 8px 24px rgba(0,0,0,.08);transform:translateY(-2px)}
+.itin-cover{height:140px;position:relative;overflow:hidden}
+.itin-cover-overlay{position:absolute;inset:0;background:rgba(0,0,0,.1)}
+.itin-cat{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.9);font-size:10px;font-weight:600;color:#374151;padding:4px 10px;border-radius:20px}
+.itin-rating{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.3);font-size:11px;color:#fff;padding:3px 8px;border-radius:20px;display:flex;align-items:center;gap:3px}
+.star-icon{color:#fbbf24;font-size:10px}
+.itin-tags{position:absolute;bottom:8px;left:8px;display:flex;gap:5px}
+.itin-tag{background:rgba(0,0,0,.25);color:#fff;font-size:10px;padding:3px 8px;border-radius:20px;backdrop-filter:blur(4px)}
+.itin-body{padding:14px}
+.itin-title{font-size:13px;font-weight:600;color:#1f2937;line-height:1.4;margin-bottom:12px}
+.itin-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.meta-item{background:#f9fafb;border-radius:8px;padding:6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+.meta-val{font-size:11px;font-weight:600;color:#374151}
+.itin-footer{display:flex;align-items:center;justify-content:space-between}
+.author{display:flex;align-items:center;gap:6px}
+.author-avatar{width:26px;height:26px;background:linear-gradient(135deg,#f97316,#ea580c);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700}
+.author-name{font-size:11px;color:#6b7280;font-weight:500}
+.followers{display:flex;align-items:center;gap:4px;font-size:11px;color:#9ca3af}
+
+/* Destinations grid */
+.dest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.dest-card{border-radius:18px;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:4/3}
+.dest-cover{width:100%;height:100%;position:relative}
+.dest-overlay{position:absolute;inset:0;background:rgba(0,0,0,.2);transition:background .2s}
+.dest-card:hover .dest-overlay{background:rgba(0,0,0,.1)}
+.dest-emoji{position:absolute;top:12px;right:14px;font-size:40px;opacity:.25;transition:opacity .2s}
+.dest-card:hover .dest-emoji{opacity:.55}
+.dest-bottom{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 100%)}
+.dest-name{color:#fff;font-weight:800;font-size:17px;line-height:1.2}
+.dest-region{color:rgba(255,255,255,.7);font-size:11px;margin-top:2px}
+.dest-heat{font-size:10px;font-weight:700;color:#fff;padding:3px 9px;border-radius:20px;display:inline-block;margin-top:6px}
+.heat-hot{background:rgba(239,68,68,.75)}
+.heat-warm{background:rgba(249,115,22,.75)}
+.heat-pop{background:rgba(34,197,94,.75)}
+.dest-stats{display:flex;align-items:center;gap:12px;margin-top:8px}
+.dest-stat{display:flex;align-items:center;gap:4px;color:rgba(255,255,255,.8);font-size:11px}
+.dest-trend{margin-left:auto;color:#86efac;font-size:10px;font-weight:600;display:flex;align-items:center;gap:2px}
+
+/* How it works */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.how-card{text-align:center;padding:32px 24px;border-radius:18px;border:1px solid #f3f4f6;position:relative;transition:all .2s;cursor:default}
+.how-card:hover{border-color:#fed7aa;box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.how-step{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#f97316;color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px}
+.how-icon-wrap{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.how-title{font-size:16px;font-weight:700;color:#1f2937;margin-bottom:8px}
+.how-desc{font-size:13px;color:#6b7280;line-height:1.6}
+
+/* CTA */
+.cta-section{background:#f97316;padding:56px 24px;text-align:center}
+.cta-inner{max-width:600px;margin:0 auto}
+.cta-title{font-size:36px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:12px}
+.cta-sub{color:rgba(255,255,255,.85);font-size:16px;margin-bottom:28px}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-btn1{background:#fff;color:#ea580c;font-weight:700;font-size:15px;padding:14px 28px;border-radius:14px;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.cta-btn2{background:#ea580c;color:#fff;font-weight:700;font-size:15px;padding:14px 28px;border-radius:14px;border:1.5px solid rgba(255,255,255,.3);cursor:pointer}
+
+/* Footer */
+.footer{background:#030712;color:#9ca3af}
+.footer-cta{background:#f97316;padding:32px 24px}
+.footer-cta-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.footer-cta h3{color:#fff;font-size:20px;font-weight:700}
+.footer-cta p{color:rgba(255,255,255,.8);font-size:13px;margin-top:4px}
+.footer-cta-btns{display:flex;gap:10px;flex-shrink:0}
+.fcta-btn1{background:#fff;color:#ea580c;font-weight:600;font-size:13px;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;white-space:nowrap}
+.fcta-btn2{background:rgba(0,0,0,.15);color:#fff;font-weight:600;font-size:13px;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;white-space:nowrap}
+.footer-main{max-width:1200px;margin:0 auto;padding:48px 24px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:40px}
+.footer-brand-name{color:#fff;font-size:17px;font-weight:800;letter-spacing:-.02em}
+.footer-brand-sub{color:#f97316;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.footer-desc{font-size:13px;line-height:1.7;color:#6b7280;margin-top:14px;margin-bottom:20px}
+.footer-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:20px}
+.fstat{background:#111827;border-radius:10px;padding:10px 12px}
+.fstat-val{color:#fff;font-weight:700;font-size:13px}
+.fstat-lbl{color:#6b7280;font-size:11px;margin-top:2px}
+.socials{display:flex;gap:6px}
+.social-btn{width:30px;height:30px;background:#1f2937;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
+.social-btn:hover{background:#f97316}
+.footer-col-title{color:#fff;font-size:13px;font-weight:600;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #1f2937}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-links a{font-size:13px;color:#6b7280;transition:color .15s;display:flex;align-items:center;gap:7px}
+.footer-links a:hover{color:#fb923c}
+.flink-dot{width:4px;height:4px;background:#374151;border-radius:50%;transition:background .15s;flex-shrink:0}
+.footer-links a:hover .flink-dot{background:#fb923c}
+.contact-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.contact-icon{width:30px;height:30px;background:#1f2937;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.contact-label{color:#fff;font-size:13px;font-weight:500}
+.contact-sub{color:#6b7280;font-size:11px;margin-top:2px}
+.newsletter-title{color:#fff;font-size:13px;font-weight:600;margin-bottom:6px}
+.newsletter-sub{font-size:12px;color:#6b7280;margin-bottom:10px}
+.newsletter-form{display:flex;gap:6px}
+.newsletter-input{flex:1;background:#1f2937;border:1px solid #374151;border-radius:10px;padding:8px 12px;font-size:13px;color:#fff;outline:none;transition:border-color .15s}
+.newsletter-input::placeholder{color:#6b7280}
+.newsletter-input:focus{border-color:#f97316}
+.newsletter-btn{background:#f97316;border:none;border-radius:10px;padding:8px 12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
+.newsletter-btn:hover{background:#ea580c}
+.footer-bottom{border-top:1px solid #1f2937}
+.footer-bottom-inner{max-width:1200px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.footer-bottom p{font-size:12px;color:#6b7280}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{font-size:12px;color:#6b7280;transition:color .15s}
+.footer-legal a:hover{color:#fb923c}
+
+/* Dropdown active state */
+.nav-item:hover .nav-dropdown{display:block}
+.nav-dropdown{display:none}
+</style>
+
+<!-- TOP BAR -->
+<div class="topbar">✈️ &nbsp;Shartinary Beta — Bagikan itinerarymu & dapatkan feedback dari komunitas!</div>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="nav-inner">
+    <!-- Logo -->
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </div>
+      <div>
+        <div class="logo-text">Shartinary</div>
+        <div class="logo-sub">Sharing Itinerary</div>
+      </div>
+    </a>
+
+    <!-- Menus -->
+    <div class="nav-menus">
+      <div class="nav-item">
+        <button class="nav-btn">Jelajahi <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Itinerary Terpopuler</div><div class="dd-desc">Pilihan terbaik dari komunitas</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Destinasi Trending</div><div class="dd-desc">Lagi ramai dikunjungi sekarang</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Budget Terjangkau</div><div class="dd-desc">Perjalanan hemat tanpa kompromi</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Weekend Escape</div><div class="dd-desc">Liburan singkat 2–3 hari</div></div></a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button class="nav-btn">Destinasi <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Indonesia</div><div class="dd-desc">Ribuan pulau, jutaan cerita</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Asia Tenggara</div><div class="dd-desc">Negara tetangga yang menawan</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Asia Timur</div><div class="dd-desc">Jepang, Korea, China & lebih</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Eropa</div><div class="dd-desc">Kota sejarah & arsitektur megah</div></div></a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button class="nav-btn">Itinerary <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Buat Itinerary</div><div class="dd-desc">Rencanakan perjalananmu</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Itinerary Saya</div><div class="dd-desc">Kelola semua rencanamu</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Disimpan</div><div class="dd-desc">Referensi dari traveler lain</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Ikut Itinerary</div><div class="dd-desc">Bergabung dengan grup perjalanan</div></div></a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button class="nav-btn">Budget <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Kalkulator Perjalanan</div><div class="dd-desc">Estimasi biaya perjalananmu</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Lacak Pengeluaran</div><div class="dd-desc">Catat semua transaksi</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Split Cost</div><div class="dd-desc">Bagi biaya dengan teman</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Tips Hemat</div><div class="dd-desc">Cara jalan lebih hemat</div></div></a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button class="nav-btn">Komunitas <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Review & Rating</div><div class="dd-desc">Ceritakan pengalamanmu</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Forum Diskusi</div><div class="dd-desc">Tanya jawab sesama traveler</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Travel Buddy</div><div class="dd-desc">Cari teman perjalanan</div></div></a>
+          <a href="#" class="nav-dropdown-item"><div class="dd-icon"><div class="dd-dot"></div></div><div><div class="dd-label">Blog Perjalanan</div><div class="dd-desc">Inspirasi dari traveler lain</div></div></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="nav-actions">
+      <button class="btn-ghost">Masuk</button>
+      <button class="btn-primary">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Buat Akun
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- GREETING BAR -->
+<div class="greeting-bar">
+  <div class="greeting-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:13px;font-weight:700;color:#c2410c">Selamat Pagi ☀️</span>
+      <span style="color:#fdba74;font-size:11px">•</span>
+      <span style="font-size:13px;color:#c2410c">Mau ke mana hari ini? Temukan inspirasi perjalananmu di Shartinary.</span>
+    </div>
+    <a href="#" class="greeting-link">Jelajahi sekarang <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div style="background:#fff;overflow:hidden;position:relative">
+  <div style="position:absolute;top:0;right:0;width:50%;height:100%;background:linear-gradient(135deg,#fff7ed,transparent);pointer-events:none"></div>
+  <div style="position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;background:#ffedd5;border-radius:50%;opacity:.5;pointer-events:none"></div>
+  <div class="hero">
+    <div>
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        ✈️ Platform Sharing Itinerary #1 Indonesia
+      </div>
+      <h1>Rencanakan <span class="hero-accent">Perjalanan</span> Impianmu & Bagikan ke Dunia</h1>
+      <p>Buat itinerary detail lengkap dengan budget, tempat, dan jadwal. Ikuti itinerary traveler lain sebagai referensi. Gratis selamanya.</p>
+      <div class="search-box">
+        <div class="search-input">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Cari destinasi, itinerary, atau traveler...">
+        </div>
+        <button class="search-btn">Cari</button>
+      </div>
+      <div class="quick-tags">
+        <span class="tag-label">Populer:</span>
+        <span class="tag-chip">Bali</span>
+        <span class="tag-chip">Labuan Bajo</span>
+        <span class="tag-chip">Raja Ampat</span>
+        <span class="tag-chip">Jogja</span>
+        <span class="tag-chip">Lombok</span>
+        <span class="tag-chip">Bromo</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="float-badge1">
+        <div class="b1-label">Itinerary Baru</div>
+        <div class="b1-val">+124 <span style="font-size:13px;font-weight:400;opacity:.8">hari ini</span></div>
+      </div>
+      <div class="hero-card">
+        <div class="card-cover">
+          <div class="card-cover-emoji">🌴</div>
+          <div class="card-rating">⭐ 4.9</div>
+          <div class="card-cover-info">
+            <p>Bali 7 Hari</p>
+            <span>Ubud · Seminyak · Nusa Penida</span>
+          </div>
+        </div>
+        <div class="card-stats">
+          <div class="card-stat"><div class="card-stat-val">7</div><div class="card-stat-lbl">Hari</div></div>
+          <div class="card-stat"><div class="card-stat-val">18</div><div class="card-stat-lbl">Tempat</div></div>
+          <div class="card-stat"><div class="card-stat-val">4.2Jt</div><div class="card-stat-lbl">Budget</div></div>
+        </div>
+        <div class="card-avatars">
+          <div class="avatar-stack">
+            <div class="avatar-item">R</div>
+            <div class="avatar-item">S</div>
+            <div class="avatar-item">D</div>
+            <div class="avatar-item">M</div>
+          </div>
+          <span class="avatar-text">+1.2K mengikuti itinerary ini</span>
+        </div>
+      </div>
+      <div class="float-badge2">
+        <div class="badge2-icon">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#16a34a" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        </div>
+        <div><div class="badge2-label">Budget saved</div><div class="badge2-val">Rp 850.000</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-val">12K+</div><div class="stat-lbl">Itinerary Dibagikan</div></div>
+    <div class="stat-item"><div class="stat-val">8K+</div><div class="stat-lbl">Traveler Aktif</div></div>
+    <div class="stat-item"><div class="stat-val">340+</div><div class="stat-lbl">Destinasi Tercakup</div></div>
+    <div class="stat-item"><div class="stat-val">Rp 2.4M</div><div class="stat-lbl">Rata-rata Budget Hemat</div></div>
+  </div>
+</div>
+
+<!-- ITINERARY TERBARU -->
+<div class="section">
+  <div class="section-inner">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow"><div class="section-bar"></div><span class="section-tag">Terbaru</span></div>
+        <div class="section-title">Itinerary Terbaru</div>
+        <div class="section-sub">Itinerary terkini yang dibagikan oleh komunitas traveler</div>
+      </div>
+      <a href="#" class="see-all">Lihat semua <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="cards-grid">
+      <div class="itin-card">
+        <div class="itin-cover" style="background:linear-gradient(135deg,#fb923c,#f43f5e)">
+          <div class="itin-cover-overlay"></div>
+          <div class="itin-cat">Alam & Budaya</div>
+          <div class="itin-rating"><span class="star-icon">★</span> 4.9</div>
+          <div class="itin-tags"><span class="itin-tag">#Bali</span><span class="itin-tag">#Pantai</span><span class="itin-tag">#Alam</span></div>
+        </div>
+        <div class="itin-body">
+          <div class="itin-title line-clamp-2">Bali 7 Hari — Ubud, Seminyak & Nusa Penida</div>
+          <div class="itin-meta">
+            <div class="meta-item"><div class="meta-val">7 Hari</div></div>
+            <div class="meta-item"><div class="meta-val">18 Tempat</div></div>
+            <div class="meta-item"><div class="meta-val" style="font-size:10px">Rp 4.2Jt</div></div>
+          </div>
+          <div class="itin-footer">
+            <div class="author"><div class="author-avatar">R</div><span class="author-name">Rizki Pratama</span></div>
+            <div class="followers"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> 1.2K</div>
+          </div>
+        </div>
+      </div>
+      <div class="itin-card">
+        <div class="itin-cover" style="background:linear-gradient(135deg,#f59e0b,#f97316)">
+          <div class="itin-cover-overlay"></div>
+          <div class="itin-cat">Sejarah & Budaya</div>
+          <div class="itin-rating"><span class="star-icon">★</span> 4.8</div>
+          <div class="itin-tags"><span class="itin-tag">#Jogja</span><span class="itin-tag">#Solo</span><span class="itin-tag">#Kuliner</span></div>
+        </div>
+        <div class="itin-body">
+          <div class="itin-title line-clamp-2">Jogja–Solo 4 Hari: Keraton, Prambanan, Batik Walk</div>
+          <div class="itin-meta">
+            <div class="meta-item"><div class="meta-val">4 Hari</div></div>
+            <div class="meta-item"><div class="meta-val">12 Tempat</div></div>
+            <div class="meta-item"><div class="meta-val" style="font-size:10px">Rp 1.85Jt</div></div>
+          </div>
+          <div class="itin-footer">
+            <div class="author"><div class="author-avatar">S</div><span class="author-name">Sari Dewi</span></div>
+            <div class="followers"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> 876</div>
+          </div>
+        </div>
+      </div>
+      <div class="itin-card">
+        <div class="itin-cover" style="background:linear-gradient(135deg,#14b8a6,#06b6d4)">
+          <div class="itin-cover-overlay"></div>
+          <div class="itin-cat">Petualangan</div>
+          <div class="itin-rating"><span class="star-icon">★</span> 4.9</div>
+          <div class="itin-tags"><span class="itin-tag">#NTT</span><span class="itin-tag">#Snorkeling</span><span class="itin-tag">#Wildlife</span></div>
+        </div>
+        <div class="itin-body">
+          <div class="itin-title line-clamp-2">Labuan Bajo 5 Hari: Komodo & Pulau Padar</div>
+          <div class="itin-meta">
+            <div class="meta-item"><div class="meta-val">5 Hari</div></div>
+            <div class="meta-item"><div class="meta-val">10 Tempat</div></div>
+            <div class="meta-item"><div class="meta-val" style="font-size:10px">Rp 5.6Jt</div></div>
+          </div>
+          <div class="itin-footer">
+            <div class="author"><div class="author-avatar">D</div><span class="author-name">Dito Wirawan</span></div>
+            <div class="followers"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> 2.1K</div>
+          </div>
+        </div>
+      </div>
+      <div class="itin-card">
+        <div class="itin-cover" style="background:linear-gradient(135deg,#3b82f6,#14b8a6)">
+          <div class="itin-cover-overlay"></div>
+          <div class="itin-cat">Diving & Snorkeling</div>
+          <div class="itin-rating"><span class="star-icon">★</span> 5.0</div>
+          <div class="itin-tags"><span class="itin-tag">#Papua</span><span class="itin-tag">#Diving</span><span class="itin-tag">#Laut</span></div>
+        </div>
+        <div class="itin-body">
+          <div class="itin-title line-clamp-2">Raja Ampat 6 Hari: Surga Bawah Laut Papua</div>
+          <div class="itin-meta">
+            <div class="meta-item"><div class="meta-val">6 Hari</div></div>
+            <div class="meta-item"><div class="meta-val">9 Tempat</div></div>
+            <div class="meta-item"><div class="meta-val" style="font-size:10px">Rp 7.8Jt</div></div>
+          </div>
+          <div class="itin-footer">
+            <div class="author"><div class="author-avatar">M</div><span class="author-name">Maya Putri</span></div>
+            <div class="followers"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> 3.2K</div>
+          </div>
+        </div>
+      </div>
+      <div class="itin-card">
+        <div class="itin-cover" style="background:linear-gradient(135deg,#10b981,#14b8a6)">
+          <div class="itin-cover-overlay"></div>
+          <div class="itin-cat">Pantai & Relaksasi</div>
+          <div class="itin-rating"><span class="star-icon">★</span> 4.7</div>
+          <div class="itin-tags"><span class="itin-tag">#Lombok</span><span class="itin-tag">#Gili</span><span class="itin-tag">#Santai</span></div>
+        </div>
+        <div class="itin-body">
+          <div class="itin-title line-clamp-2">Lombok & Gili Islands 4 Hari</div>
+          <div class="itin-meta">
+            <div class="meta-item"><div class="meta-val">4 Hari</div></div>
+            <div class="meta-item"><div class="meta-val">11 Tempat</div></div>
+            <div class="meta-item"><div class="meta-val" style="font-size:10px">Rp 3.1Jt</div></div>
+          </div>
+          <div class="itin-footer">
+            <div class="author"><div class="author-avatar">F</div><span class="author-name">Fajar Kurnia</span></div>
+            <div class="followers"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> 1.5K</div>
+          </div>
+        </div>
+      </div>
+      <div class="itin-card">
+        <div class="itin-cover" style="background:linear-gradient(135deg,#ef4444,#f97316)">
+          <div class="itin-cover-overlay"></div>
+          <div class="itin-cat">Alam & Trekking</div>
+          <div class="itin-rating"><span class="star-icon">★</span> 4.8</div>
+          <div class="itin-tags"><span class="itin-tag">#Jatim</span><span class="itin-tag">#Gunung</span><span class="itin-tag">#Trekking</span></div>
+        </div>
+        <div class="itin-body">
+          <div class="itin-title line-clamp-2">Bromo–Ijen 3 Hari: Sunrise & Blue Fire</div>
+          <div class="itin-meta">
+            <div class="meta-item"><div class="meta-val">3 Hari</div></div>
+            <div class="meta-item"><div class="meta-val">6 Tempat</div></div>
+            <div class="meta-item"><div class="meta-val" style="font-size:10px">Rp 1.2Jt</div></div>
+          </div>
+          <div class="itin-footer">
+            <div class="author"><div class="author-avatar">H</div><span class="author-name">Hendra S.</span></div>
+            <div class="followers"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> 987</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRENDING DESTINATIONS -->
+<div class="section section-bg-gray">
+  <div class="section-inner">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow"><div class="section-bar"></div><span class="section-tag">Trending</span></div>
+        <div class="section-title">Destinasi Sedang Ramai</div>
+        <div class="section-sub">Destinasi yang paling banyak direncanakan traveler saat ini</div>
+      </div>
+      <a href="#" class="see-all">Semua destinasi <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="dest-grid">
+      <div class="dest-card"><div class="dest-cover" style="background:linear-gradient(135deg,#14b8a6,#06b6d4)"><div class="dest-overlay"></div><div class="dest-emoji">🦎</div><div class="dest-bottom"><div class="dest-name">Labuan Bajo</div><div class="dest-region">Nusa Tenggara Timur</div><span class="dest-heat heat-hot">Sangat Ramai</span><div class="dest-stats"><div class="dest-stat">👥 12.4K traveler</div><div class="dest-stat">🗺 234 itinerary</div><div class="dest-trend">↑ +28%</div></div></div></div></div>
+      <div class="dest-card"><div class="dest-cover" style="background:linear-gradient(135deg,#f97316,#f59e0b)"><div class="dest-overlay"></div><div class="dest-emoji">🌺</div><div class="dest-bottom"><div class="dest-name">Bali</div><div class="dest-region">Bali</div><span class="dest-heat heat-warm">Ramai</span><div class="dest-stats"><div class="dest-stat">👥 48.1K traveler</div><div class="dest-stat">🗺 1.8K itinerary</div><div class="dest-trend">↑ +12%</div></div></div></div></div>
+      <div class="dest-card"><div class="dest-cover" style="background:linear-gradient(135deg,#3b82f6,#14b8a6)"><div class="dest-overlay"></div><div class="dest-emoji">🐠</div><div class="dest-bottom"><div class="dest-name">Raja Ampat</div><div class="dest-region">Papua Barat</div><span class="dest-heat heat-pop">Populer</span><div class="dest-stats"><div class="dest-stat">👥 5.2K traveler</div><div class="dest-stat">🗺 156 itinerary</div><div class="dest-trend">↑ +41%</div></div></div></div></div>
+      <div class="dest-card"><div class="dest-cover" style="background:linear-gradient(135deg,#f59e0b,#eab308)"><div class="dest-overlay"></div><div class="dest-emoji">🏛️</div><div class="dest-bottom"><div class="dest-name">Yogyakarta</div><div class="dest-region">DI Yogyakarta</div><span class="dest-heat heat-warm">Ramai</span><div class="dest-stats"><div class="dest-stat">👥 31.7K traveler</div><div class="dest-stat">🗺 976 itinerary</div><div class="dest-trend">↑ +9%</div></div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-inner">
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="display:inline-flex;align-items:center;gap:8px;color:#f97316;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">
+        <div style="width:4px;height:16px;background:#f97316;border-radius:4px"></div>
+        Cara Kerja
+        <div style="width:4px;height:16px;background:#f97316;border-radius:4px"></div>
+      </div>
+      <div style="font-size:28px;font-weight:900;color:#111">Mudah dalam 3 Langkah</div>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-step">01</div>
+        <div class="how-icon-wrap" style="background:#fff7ed"><svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#f97316" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div>
+        <div class="how-title">Buat Itinerary</div>
+        <div class="how-desc">Susun rencana perjalananmu hari per hari. Tambahkan destinasi, hotel, budget, dan perlengkapan yang dibutuhkan.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-step">02</div>
+        <div class="how-icon-wrap" style="background:#eff6ff"><svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#3b82f6" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></div>
+        <div class="how-title">Bagikan ke Komunitas</div>
+        <div class="how-desc">Publikasikan itinerarymu agar traveler lain bisa menemukan dan menjadikannya referensi perjalanan mereka.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-step">03</div>
+        <div class="how-icon-wrap" style="background:#f0fdf4"><svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#22c55e" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
+        <div class="how-title">Kelola Budget Bareng</div>
+        <div class="how-desc">Catat semua pengeluaran dan bagi biaya dengan teman perjalananmu secara otomatis dan transparan.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA SECTION -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-title">Mulai Perjalananmu Sekarang 🚀</div>
+    <div class="cta-sub">Gratis selamanya. Buat akun dan mulai merencanakan petualangan pertamamu.</div>
+    <div class="cta-btns">
+      <button class="cta-btn1">Buat Akun Gratis</button>
+      <button class="cta-btn2">Jelajahi Itinerary</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-cta">
+    <div class="footer-cta-inner">
+      <div>
+        <h3>Siap merencanakan perjalananmu?</h3>
+        <p>Bergabung dengan ribuan traveler yang sudah sharing itinerary di Shartinary.</p>
+      </div>
+      <div class="footer-cta-btns">
+        <button class="fcta-btn1">Jelajahi Sekarang</button>
+        <button class="fcta-btn2">Daftar Gratis</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-main">
+    <!-- Brand -->
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <div style="width:34px;height:34px;background:#f97316;border-radius:10px;display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        </div>
+        <div><div class="footer-brand-name">Shartinary</div><div class="footer-brand-sub">Sharing Itinerary</div></div>
+      </div>
+      <div class="footer-desc">Platform berbagi itinerary perjalanan terlengkap. Rencanakan, bagikan, dan temukan inspirasi perjalananmu bersama komunitas traveler Indonesia.</div>
+      <div class="footer-stats">
+        <div class="fstat"><div class="fstat-val">12K+</div><div class="fstat-lbl">Itinerary</div></div>
+        <div class="fstat"><div class="fstat-val">8K+</div><div class="fstat-lbl">Traveler</div></div>
+        <div class="fstat"><div class="fstat-val">340+</div><div class="fstat-lbl">Destinasi</div></div>
+        <div class="fstat"><div class="fstat-val">4.9★</div><div class="fstat-lbl">Rating</div></div>
+      </div>
+      <div class="socials">
+        <div class="social-btn"><svg width="14" height="14" fill="#9ca3af" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+        <div class="social-btn"><svg width="14" height="14" fill="#9ca3af" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></div>
+        <div class="social-btn"><svg width="14" height="14" fill="#9ca3af" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></div>
+      </div>
+    </div>
+    <!-- Menu -->
+    <div>
+      <div class="footer-col-title">Menu</div>
+      <ul class="footer-links">
+        <li><a href="#"><span class="flink-dot"></span>Beranda</a></li>
+        <li><a href="#"><span class="flink-dot"></span>Jelajahi Itinerary</a></li>
+        <li><a href="#"><span class="flink-dot"></span>Destinasi Wisata</a></li>
+        <li><a href="#"><span class="flink-dot"></span>Komunitas Traveler</a></li>
+        <li><a href="#"><span class="flink-dot"></span>Blog Perjalanan</a></li>
+        <li><a href="#"><span class="flink-dot"></span>Tentang Kami</a></li>
+      </ul>
+    </div>
+    <!-- Services -->
+    <div>
+      <div class="footer-col-title">Layanan</div>
+      <ul class="footer-links">
+        <li><a href="#"><span class="flink-dot"></span>Buat Itinerary</a></li>
+        <li><a href="#"><span class="flink-dot"></span>Kalkulator Budget</a></li>
+        <li><a href="#"><span class="flink-dot"></span>Split Cost</a></li>
+        <li><a href="#"><span class="flink-dot"></span>Travel Buddy</a></li>
+        <li><a href="#"><span class="flink-dot"></span>Review Destinasi</a></li>
+        <li><a href="#"><span class="flink-dot"></span>Export PDF</a></li>
+      </ul>
+    </div>
+    <!-- Contact -->
+    <div>
+      <div class="footer-col-title">Kontak</div>
+      <div class="contact-item"><div class="contact-icon"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#f97316" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div><div><div class="contact-label">halo@shartinary.id</div><div class="contact-sub">Email kami</div></div></div>
+      <div class="contact-item"><div class="contact-icon"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#f97316" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div><div><div class="contact-label">+62 812-3456-7890</div><div class="contact-sub">WhatsApp tersedia</div></div></div>
+      <div class="contact-item"><div class="contact-icon"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#f97316" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div><div class="contact-label">Jakarta, Indonesia</div><div class="contact-sub">Kantor pusat</div></div></div>
+      <div>
+        <div class="newsletter-title">Newsletter</div>
+        <div class="newsletter-sub">Tips traveling & itinerary terbaru langsung ke emailmu.</div>
+        <div class="newsletter-form">
+          <input class="newsletter-input" type="email" placeholder="Email kamu">
+          <button class="newsletter-btn"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <p>© 2025 Shartinary. Dibuat dengan ❤️ untuk para traveler Indonesia.</p>
+      <div class="footer-legal">
+        <a href="#">Kebijakan Privasi</a>
+        <a href="#">Syarat & Ketentuan</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</div>
