@@ -1,15 +1,48 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Custom Aesthetic Palette */
+  --color-brand-orange: #d47a46; /* Doff Burnt Orange */
+  --color-brand-orange-light: #fdf5f0;
+  --color-brand-brown: #3d2b1f; /* Deep Earthy Brown */
+  --color-brand-brown-muted: #5c4a3e;
+}
+
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+  html, body {
+    @apply bg-[#faf9f6] text-brand-brown antialiased; /* Warm white background */
+  }
 }
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
-
   @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
+    color-scheme: light; /* Force light theme for this aesthetic */
+  }
+}
+
+/* Custom Micro-Animations */
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .animation-delay-200 { animation-delay: 200ms; }
+  .animation-delay-400 { animation-delay: 400ms; }
+  .animation-delay-600 { animation-delay: 600ms; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
