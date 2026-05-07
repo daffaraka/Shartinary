@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('province_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('image_url')->nullable();
             $table->decimal('lat', 10, 8)->nullable();
             $table->decimal('lng', 11, 8)->nullable();
             $table->timestamps();

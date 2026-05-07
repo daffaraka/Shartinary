@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\LocationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,11 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login',    [AuthController::class, 'login']);
 });
+
+// Master Lokasi (Public)
+Route::get('/countries', [LocationController::class, 'countries']);
+Route::get('/provinces', [LocationController::class, 'provinces']);
+Route::get('/cities',    [LocationController::class, 'cities']);
 
 // Protected routes (wajib login / bearer token)
 Route::middleware('auth:sanctum')->group(function () {
