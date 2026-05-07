@@ -12,4 +12,9 @@ class Country extends Model
     {
         return $this->hasMany(Province::class);
     }
+
+    public function places()
+    {
+        return $this->hasManyThrough(Place::class, City::class, 'province_id', 'city_id', 'id', 'id');
+    }
 }

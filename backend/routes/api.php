@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LocationController;
+use App\Http\Controllers\Api\PlaceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,21 @@ Route::prefix('auth')->group(function () {
 Route::get('/countries', [LocationController::class, 'countries']);
 Route::get('/provinces', [LocationController::class, 'provinces']);
 Route::get('/cities',    [LocationController::class, 'cities']);
+
+// Master Data - Categories & Tags (Public)
+Route::get('/categories', [\App\Http\Controllers\Api\CategoryController::class, 'index']);
+Route::get('/tags', [\App\Http\Controllers\Api\TagController::class, 'index']);
+
+// Places (Public - Read Only)
+Route::prefix('places')->group(function () {
+    Route::get('/', [PlaceController::class, 'index']);
+    Route::get('/search', [PlaceController::class, 'search']);
+    Route::get('/nearby', [PlaceController::class, 'nearby']);
+    Route::get('/city/{cityId}', [PlaceController::class, 'byCity']);
+    Route::get('/category/{categorySlug}', [PlaceController::class, 'byCategory']);
+    Route::get('/tag/{tagSlug}', [PlaceController::class, 'byTag']);
+    Route::get('/{place}', [PlaceController::class, 'show']);
+});
 
 // Protected routes (wajib login / bearer token)
 Route::middleware('auth:sanctum')->group(function () {

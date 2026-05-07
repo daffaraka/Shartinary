@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
-    //
+    protected $fillable = ['name', 'slug'];
+
+    public function places()
+    {
+        return $this->belongsToMany(Place::class, 'place_tag');
+    }
 }

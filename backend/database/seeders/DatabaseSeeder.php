@@ -16,7 +16,19 @@ class DatabaseSeeder extends Seeder
         // 1. Seed Roles & Permissions terlebih dahulu
         $this->call(RoleSeeder::class);
 
-        // 2. Buat akun Admin
+        // 2. Seed Master Data (Countries, Provinces, Cities)
+        $this->call(CountrySeeder::class);
+        $this->call(ProvinceSeeder::class);
+        $this->call(CitySeeder::class);
+
+        // 3. Seed Categories & Tags
+        $this->call(CategorySeeder::class);
+        $this->call(TagSeeder::class);
+
+        // 4. Seed Places (Master POI)
+        $this->call(PlaceSeeder::class);
+
+        // 5. Buat akun Admin
         $admin = User::firstOrCreate(
             ['email' => 'admin@shartinary.com'],
             [
@@ -27,7 +39,7 @@ class DatabaseSeeder extends Seeder
         );
         $admin->assignRole('admin');
 
-        // 3. Buat akun User Contoh
+        // 6. Buat akun User Contoh
         $user = User::firstOrCreate(
             ['email' => 'user@shartinary.com'],
             [

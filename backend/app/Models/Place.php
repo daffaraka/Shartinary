@@ -6,5 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Place extends Model
 {
-    //
+    protected $fillable = ['name', 'address', 'latitude', 'longitude', 'city_id', 'category_id'];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'place_tag');
+    }
 }
