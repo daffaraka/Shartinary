@@ -1,5 +1,5 @@
 import ItineraryCard from "./ItineraryCard";
-import { itineraries } from "../data/dummyItineraries";
+import { itineraries } from "../../data/dummyItineraries";
 
 export default function RecentItineraries() {
   return (
@@ -21,24 +21,24 @@ export default function RecentItineraries() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <ItineraryCard 
+            <ItineraryCard
               title={itineraries[0].title}
               price={itineraries[0].totalSpend}
               loc={itineraries[0].location}
               duration={itineraries[0].duration}
               badges={itineraries[0].tags}
-              isFeatured={true} 
+              isFeatured={true}
             />
           </div>
           <div className="lg:col-span-1 flex flex-col gap-8">
-            <ItineraryCard 
+            <ItineraryCard
               title={itineraries[1].title}
               price={itineraries[1].totalSpend}
               loc={itineraries[1].location}
               duration={itineraries[1].duration}
               badges={itineraries[1].tags}
             />
-            <ItineraryCard 
+            <ItineraryCard
               title={itineraries[2].title}
               price={itineraries[2].totalSpend}
               loc={itineraries[2].location}

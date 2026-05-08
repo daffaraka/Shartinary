@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import Sidebar from "./Sidebar";
 
 export default function AdminLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -20,6 +21,10 @@ export default function AdminLayout({ children }) {
         { name: "Kategori", path: "/admin/categories", icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg> },
         { name: "Tags Filter", path: "/admin/tags", icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg> },
         { name: "Wilayah", path: "/admin/regions", icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> },
+        { name: "Negara", path: "/admin/negara", icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 21V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg> },
+        { name: "Provinsi", path: "/admin/provinsi", icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg> },
+        { name: "Kota", path: "/admin/kota", icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg> },
+
       ]
     },
     {
@@ -35,73 +40,33 @@ export default function AdminLayout({ children }) {
     <div className="min-h-screen bg-gray-50 font-sans flex">
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}
 
       {/* Sidebar - Slate Theme */}
-      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 transition-transform duration-300 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"} flex flex-col`}>
-        {/* Sidebar Header */}
-        <div className="h-16 flex items-center px-6 border-b border-slate-800 shrink-0">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-white tracking-tight">Shartinary</span>
-            <span className="text-[10px] font-semibold bg-blue-600 text-white px-2 py-0.5 rounded">ADMIN</span>
-          </Link>
-        </div>
-
-        {/* Sidebar Menu */}
-        <div className="flex-1 overflow-y-auto py-6 px-4 space-y-8">
-          {menuGroups.map((group, groupIdx) => (
-            <div key={groupIdx}>
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">
-                {group.title}
-              </div>
-              <div className="space-y-1">
-                {group.items.map((item, itemIdx) => (
-                  <Link 
-                    key={itemIdx} 
-                    to={item.path} 
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] font-medium transition-colors ${item.path === "/admin" ? "bg-blue-600 text-white" : "text-slate-400 hover:bg-slate-800 hover:text-white"}`}
-                  >
-                    {item.icon}
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Sidebar Footer */}
-        <div className="p-4 border-t border-slate-800 shrink-0">
-          <Link to="/" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            Kembali ke Web
-          </Link>
-        </div>
-      </aside>
-
+      <Sidebar isSidebarOpen={isSidebarOpen} menuGroups={menuGroups} />
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        
+
         {/* Top Navbar */}
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 z-10 shadow-sm">
           {/* Left: Hamburger & Search */}
           <div className="flex items-center gap-4 flex-1">
-            <button 
+            <button
               onClick={() => setIsSidebarOpen(true)}
               className="p-2 -ml-2 rounded-md text-gray-500 hover:bg-gray-100 lg:hidden"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
-            
+
             <div className="hidden sm:flex items-center bg-gray-100 rounded-lg px-4 py-2 w-full max-w-md focus-within:ring-2 focus-within:ring-blue-500/20">
               <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              <input 
-                type="text" 
-                placeholder="Cari itinerary, user, atau laporan..." 
+              <input
+                type="text"
+                placeholder="Cari itinerary, user, atau laporan..."
                 className="bg-transparent border-none focus:outline-none ml-2 w-full text-[14px] text-gray-700"
               />
             </div>
@@ -113,9 +78,9 @@ export default function AdminLayout({ children }) {
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
               <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
-            
+
             <div className="h-8 w-px bg-gray-200 hidden sm:block"></div>
-            
+
             <button className="flex items-center gap-2 group">
               <div className="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-sm">
                 AD
@@ -133,3 +98,6 @@ export default function AdminLayout({ children }) {
     </div>
   );
 }
+
+
+

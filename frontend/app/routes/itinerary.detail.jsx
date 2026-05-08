@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 import { itineraries, CATEGORY_COLORS } from "../data/dummyItineraries";
 
 export default function ItineraryDetail() {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/layout/Navbar";
 
 export default function CreateItinerary() {
   const [step, setStep] = useState("form"); // 'form' | 'generating' | 'done'

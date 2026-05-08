@@ -1,8 +1,8 @@
-import Navbar from "../components/Navbar";
-import Hero from "../components/Hero";
-import RecentItineraries from "../components/RecentItineraries";
-import Workflow from "../components/Workflow";
-import Footer from "../components/Footer";
+import Navbar from "../components/layout/Navbar";
+import Hero from "../components/layout/Hero";
+import RecentItineraries from "../components/layout/RecentItineraries";
+import Workflow from "../components/layout/Workflow";
+import Footer from "../components/layout/Footer";
 
 export function meta() {
   return [
