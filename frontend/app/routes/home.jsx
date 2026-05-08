@@ -1,15 +1,16 @@
+export function meta() {
+  return [
+    { title: "Shartinary - Rencanakan Perjalananmu dengan Mudah" },
+    { name: "description", content: "Platform kurasi rute perjalanan untuk traveler cerdas." },
+  ];
+}
+
 import Navbar from "../components/layout/Navbar";
 import Hero from "../components/layout/Hero";
 import RecentItineraries from "../components/layout/RecentItineraries";
 import Workflow from "../components/layout/Workflow";
 import Footer from "../components/layout/Footer";
 
-export function meta() {
-  return [
-    { title: "Shartinary — Rencanakan Perjalanan" },
-    { name: "description", content: "Platform berbagi itinerary dengan nuansa hangat dan tenang." },
-  ];
-}
 
 export default function Home() {
   return (

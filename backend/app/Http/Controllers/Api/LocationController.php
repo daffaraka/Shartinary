@@ -41,9 +41,16 @@ class LocationController extends Controller
     /**
      * Display a listing of cities by province_id.
      */
-    public function cities(GetCitiesRequest $request)
+    public function cities(Request $request) // Use Request to allow optional params
     {
-        $cities = $this->locationService->getCitiesByProvinceId($request->province_id);
+        if ($request->has('province_id') && $request->province_id) {
+            $cities = $this->locationService->getCitiesByProvinceId($request->province_id);
+        } elseif ($request->has('country_id') && $request->country_id) {
+            $cities = $this->locationService->getCitiesByCountryId($request->country_id);
+        } else {
+            $cities = collect();
+        }
+        
         return CityResource::collection($cities);
     }
 }

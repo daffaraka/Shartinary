@@ -50,10 +50,21 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Admin-only routes
     Route::middleware('role:admin')->prefix('admin')->group(function () {
-        // Placeholder - akan diisi setelah fitur itinerary & user management selesai
         Route::get('/stats', function () {
             return response()->json(['message' => 'Admin area aktif.']);
         });
+
+        // Country, Province, City CRUD
+        Route::apiResource('countries', \App\Http\Controllers\Api\Admin\CountryController::class)->except(['index', 'show']);
+        Route::apiResource('provinces', \App\Http\Controllers\Api\Admin\ProvinceController::class)->except(['index', 'show']);
+        Route::apiResource('cities', \App\Http\Controllers\Api\Admin\CityController::class)->except(['index', 'show']);
+
+        // Master Data CRUD
+        Route::apiResource('categories', \App\Http\Controllers\Api\Admin\CategoryController::class)->except(['index', 'show']);
+        Route::apiResource('tags', \App\Http\Controllers\Api\Admin\TagController::class)->except(['index', 'show']);
+        
+        // Place CRUD
+        Route::apiResource('places', \App\Http\Controllers\Api\Admin\PlaceController::class)->except(['index', 'show']);
     });
 
 });

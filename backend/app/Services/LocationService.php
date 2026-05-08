@@ -31,4 +31,13 @@ class LocationService
     {
         return City::where('province_id', $provinceId)->get();
     }
+    /**
+     * Get cities by country ID.
+     */
+    public function getCitiesByCountryId(int $countryId)
+    {
+        return City::whereHas('province', function($query) use ($countryId) {
+            $query->where('country_id', $countryId);
+        })->get();
+    }
 }

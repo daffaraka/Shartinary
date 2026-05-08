@@ -8,6 +8,12 @@ import {
 } from "react-router";
 
 import "./app.css";
+import { CountryProvider } from "./contexts/CountryContext";
+import { ExploreProvider } from "./contexts/ExploreContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import { CategoryProvider } from "./contexts/CategoryContext";
+import { TagProvider } from "./contexts/TagContext";
+import { PlaceProvider } from "./contexts/PlaceContext";
 
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -41,7 +47,21 @@ export function Layout({ children }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <AuthProvider>
+      <TagProvider>
+        <CategoryProvider>
+          <PlaceProvider>
+            <CountryProvider>
+              <ExploreProvider>
+                <Outlet />
+              </ExploreProvider>
+            </CountryProvider>
+          </PlaceProvider>
+        </CategoryProvider>
+      </TagProvider>
+    </AuthProvider>
+  );
 }
 
 export function ErrorBoundary({ error }) {
