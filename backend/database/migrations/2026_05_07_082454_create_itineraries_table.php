@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('itineraries', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('city_id')->constrained()->onDelete('cascade');
+            $table->foreignId('parent_id')->nullable()->constrained('itineraries')->onDelete('set null');
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->integer('duration_days');
+            $table->integer('total_budget')->nullable();
+            $table->boolean('is_public')->default(false);
             $table->timestamps();
         });
     }

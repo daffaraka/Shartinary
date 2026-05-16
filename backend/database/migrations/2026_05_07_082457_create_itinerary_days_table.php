@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('itinerary_days', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('itinerary_id')->constrained()->onDelete('cascade');
+            $table->integer('day_number');
+            $table->text('theme')->nullable();
             $table->timestamps();
+
+            $table->unique(['itinerary_id', 'day_number']);
         });
     }
 

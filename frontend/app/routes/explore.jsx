@@ -1,4 +1,9 @@
 import { useState, useEffect } from "react";
+import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
+import ItineraryCard from "../components/layout/ItineraryCard";
+import { useExplore } from "../contexts/ExploreContext";
+import { useCountry } from "../contexts/CountryContext";
 
 export function meta() {
   return [
@@ -7,16 +12,10 @@ export function meta() {
   ];
 }
 
-import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Footer";
-import ItineraryCard from "../components/layout/ItineraryCard";
-import { useExplore } from "../contexts/ExploreContext";
-import { useCountry } from "../contexts/CountryContext";
-
 export default function Explore() {
   const { 
-    categories, tags, places, loading: searchLoading, 
-    filters, updateFilters, performSearch 
+    categories, tags, places, itineraries, loading: searchLoading, 
+    filters, updateFilters, performSearch, exploreType, setExploreType
   } = useExplore();
 
   const { 
@@ -24,7 +23,7 @@ export default function Explore() {
     fetchProvinces, fetchCities 
   } = useCountry();
 
-  // Local state for search query to avoid too many re-renders
+  // Local state for search query
   const [tempQuery, setTempQuery] = useState(filters.query);
 
   // Sync provinces when country changes
@@ -37,16 +36,18 @@ export default function Explore() {
     if (filters.province_id) fetchCities(filters.province_id);
   }, [filters.province_id]);
 
-  // Perform search on mount or when filters change
+  // Perform search on mount or when filters/type change
   useEffect(() => {
     performSearch();
-  }, [filters.category, filters.tag, filters.city_id, filters.province_id, filters.country_id]);
+  }, [filters.category, filters.tag, filters.city_id, filters.province_id, filters.country_id, exploreType]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     updateFilters({ query: tempQuery });
     performSearch({ ...filters, query: tempQuery });
   };
+
+  const results = exploreType === "place" ? places : itineraries;
 
   return (
     <div className="min-h-screen bg-[#faf9f6] flex flex-col text-brand-brown">
@@ -59,13 +60,29 @@ export default function Explore() {
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6">Eksplorasi Inspirasi</h1>
           <p className="text-white/60 text-lg">Temukan tempat terbaik dan rute perjalanan yang dikurasi khusus untuk petualanganmu.</p>
           
+          {/* Toggle Type */}
+          <div className="flex justify-center gap-4 mt-8">
+            <button 
+              onClick={() => setExploreType("itinerary")}
+              className={`px-8 py-2 rounded-full font-bold transition-all ${exploreType === "itinerary" ? 'bg-brand-orange text-white shadow-lg' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}
+            >
+              Rute Perjalanan
+            </button>
+            <button 
+              onClick={() => setExploreType("place")}
+              className={`px-8 py-2 rounded-full font-bold transition-all ${exploreType === "place" ? 'bg-brand-orange text-white shadow-lg' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}
+            >
+              Tempat Menarik
+            </button>
+          </div>
+
           {/* Main Search Bar */}
-          <form onSubmit={handleSearch} className="mt-10 bg-white p-2 rounded-full shadow-2xl flex max-w-[600px] mx-auto focus-within:ring-4 focus-within:ring-brand-orange/30 transition-all">
+          <form onSubmit={handleSearch} className="mt-8 bg-white p-2 rounded-full shadow-2xl flex max-w-[600px] mx-auto focus-within:ring-4 focus-within:ring-brand-orange/30 transition-all">
             <input 
               type="text" 
               value={tempQuery}
               onChange={(e) => setTempQuery(e.target.value)}
-              placeholder="Cari destinasi, kota, atau tema..." 
+              placeholder={`Cari ${exploreType === "place" ? "tempat menarik" : "rute perjalanan"}...`} 
               className="flex-1 bg-transparent px-6 text-brand-brown focus:outline-none placeholder:text-brand-brown/40 font-medium"
             />
             <button type="submit" className="bg-brand-orange text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-colors shadow-lg shadow-brand-orange/20">
@@ -151,25 +168,6 @@ export default function Explore() {
               </div>
             </div>
 
-            {/* Filter Tags */}
-            <div className="bg-white p-6 rounded-3xl border border-brand-brown/5 shadow-sm">
-              <h3 className="font-bold text-[16px] text-brand-brown mb-4 flex items-center gap-2">
-                <svg className="w-4 h-4 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-                Tags Populer
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <button 
-                    key={tag.id}
-                    onClick={() => updateFilters({ tag: filters.tag === tag.slug ? "" : tag.slug })}
-                    className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all border ${filters.tag === tag.slug ? 'bg-brand-brown text-white border-brand-brown' : 'bg-transparent text-brand-brown/40 border-brand-brown/10 hover:border-brand-brown/30'}`}
-                  >
-                    #{tag.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
           </div>
         </aside>
 
@@ -177,15 +175,16 @@ export default function Explore() {
         <div className="w-full md:w-3/4">
           <div className="flex items-center justify-between mb-8">
             <div>
-                <h2 className="text-2xl font-bold text-brand-brown">Hasil Penjelajahan</h2>
-                <p className="text-brand-brown/40 text-sm">Menampilkan {places.length} tempat menarik</p>
+                <h2 className="text-2xl font-bold text-brand-brown">
+                  {exploreType === "place" ? "Tempat Menarik" : "Rute Perjalanan"}
+                </h2>
+                <p className="text-brand-brown/40 text-sm">Menampilkan {results.length} hasil ditemukan</p>
             </div>
             <div className="flex items-center gap-2 text-[14px] font-medium text-brand-brown/60">
               Urutkan: 
               <select className="bg-transparent font-bold text-brand-brown focus:outline-none cursor-pointer">
                 <option>Terbaru</option>
                 <option>Populer</option>
-                <option>Terdekat</option>
               </select>
             </div>
           </div>
@@ -193,20 +192,33 @@ export default function Explore() {
           {searchLoading ? (
              <div className="flex flex-col items-center justify-center py-20 space-y-4">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-orange"></div>
-                <p className="text-brand-brown/40 font-medium animate-pulse">Sedang mencari tempat terbaik...</p>
+                <p className="text-brand-brown/40 font-medium animate-pulse">Sedang mencari inspirasi...</p>
              </div>
-          ) : places.length > 0 ? (
+          ) : results.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {places.map((place, index) => (
-                <div key={place.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 50}ms` }}>
-                  <ItineraryCard 
-                    title={place.name}
-                    price={place.price_level || "Gratis"}
-                    loc={place.city?.name || "Lokasi Rahasia"}
-                    duration={place.category?.name || "General"}
-                    badges={place.tags?.map(t => t.name) || []}
-                    isFeatured={false}
-                  />
+              {results.map((item, index) => (
+                <div key={item.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 50}ms` }}>
+                  {exploreType === "place" ? (
+                    <ItineraryCard 
+                      id={item.id}
+                      title={item.name}
+                      price={item.price_range || "N/A"}
+                      loc={item.city?.name || "Lokasi"}
+                      duration={item.category?.name || "General"}
+                      badges={item.tags?.map(t => t.name) || []}
+                      isFeatured={false}
+                    />
+                  ) : (
+                    <ItineraryCard 
+                      id={item.id}
+                      title={item.title}
+                      price={item.total_budget?.toLocaleString('id-ID') || "N/A"}
+                      loc={item.city?.name || "Lokasi"}
+                      duration={`${item.duration_days} Hari`}
+                      badges={["Perjalanan"]}
+                      isFeatured={false}
+                    />
+                  )}
                 </div>
               ))}
             </div>
@@ -215,22 +227,8 @@ export default function Explore() {
                 <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                     <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
-                <h3 className="text-xl font-bold text-brand-brown mb-2">Ups, tempat tidak ditemukan!</h3>
+                <h3 className="text-xl font-bold text-brand-brown mb-2">Ups, hasil tidak ditemukan!</h3>
                 <p className="text-brand-brown/40 max-w-[300px] mx-auto">Coba ubah kata kunci atau hapus beberapa filter untuk melihat lebih banyak hasil.</p>
-                <button 
-                  onClick={() => { window.location.reload() }}
-                  className="mt-6 text-brand-orange font-bold text-sm hover:underline"
-                >
-                  Reset Pencarian
-                </button>
-            </div>
-          )}
-
-          {places.length > 0 && (
-            <div className="mt-12 text-center">
-              <button className="bg-white border-2 border-brand-brown/10 text-brand-brown font-bold px-8 py-3 rounded-full hover:bg-[#faf9f6] transition-colors shadow-sm">
-                Muat Lebih Banyak
-              </button>
             </div>
           )}
         </div>

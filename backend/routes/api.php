@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\CategoryController;
+use App\Http\Controllers\Api\Admin\CityController;
+use App\Http\Controllers\Api\Admin\CountryController;
+use App\Http\Controllers\Api\Admin\ItineraryController;
+use App\Http\Controllers\Api\Admin\ProvinceController;
+use App\Http\Controllers\Api\Admin\TagController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\PlaceController;
@@ -39,6 +45,12 @@ Route::prefix('places')->group(function () {
     Route::get('/{place}', [PlaceController::class, 'show']);
 });
 
+// Itineraries (Public)
+Route::prefix('itineraries')->group(function () {
+    Route::get('/', [ItineraryController::class, 'index']);
+    Route::get('/{id}', [ItineraryController::class, 'show']);
+});
+
 // Protected routes (wajib login / bearer token)
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -55,16 +67,20 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         // Country, Province, City CRUD
-        Route::apiResource('countries', \App\Http\Controllers\Api\Admin\CountryController::class)->except(['index', 'show']);
-        Route::apiResource('provinces', \App\Http\Controllers\Api\Admin\ProvinceController::class)->except(['index', 'show']);
-        Route::apiResource('cities', \App\Http\Controllers\Api\Admin\CityController::class)->except(['index', 'show']);
+        Route::apiResource('countries', CountryController::class)->except(['index', 'show']);
+        Route::apiResource('provinces', ProvinceController::class)->except(['index', 'show']);
+        Route::apiResource('cities', CityController::class)->except(['index', 'show']);
 
         // Master Data CRUD
-        Route::apiResource('categories', \App\Http\Controllers\Api\Admin\CategoryController::class)->except(['index', 'show']);
-        Route::apiResource('tags', \App\Http\Controllers\Api\Admin\TagController::class)->except(['index', 'show']);
-        
-        // Place CRUD
-        Route::apiResource('places', \App\Http\Controllers\Api\Admin\PlaceController::class)->except(['index', 'show']);
-    });
+        Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
+        Route::apiResource('tags', TagController::class)->except(['index', 'show']);
 
+        // Place CRUD
+        Route::apiResource('places', PlaceController::class)->except(['index', 'show']);
+
+        // Itinerary Management
+        Route::get('/itineraries', [ItineraryController::class, 'index']);
+        Route::delete('/itineraries/{id}', [ItineraryController::class, 'destroy']);
+        Route::patch('/itineraries/{id}/toggle-visibility', [ItineraryController::class, 'toggleVisibility']);
+    });
 });

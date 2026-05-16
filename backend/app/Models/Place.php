@@ -6,7 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Place extends Model
 {
-    protected $fillable = ['name', 'address', 'latitude', 'longitude', 'city_id', 'category_id'];
+    protected $fillable = [
+        'name',
+        'address',
+        'latitude',
+        'longitude',
+        'city_id',
+        'category_id',
+        'price_range', // Medium / High
+        'icon', // Icon default kalau belum ada foto
+    ];
+
+
+    protected $casts = [
+        'latitude' => 'float',
+        'longitude' => 'float',
+    ];
 
     public function city()
     {

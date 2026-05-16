@@ -1,8 +1,8 @@
 import { Link } from "react-router";
 
-export default function ItineraryCard({ title, price, loc, duration, badges, isFeatured }) {
+export default function ItineraryCard({ id, title, price, loc, duration, badges, isFeatured }) {
   return (
-    <Link to="/itinerary/1" className="group bg-white rounded-[24px] border border-brand-brown/5 overflow-hidden hover:shadow-xl hover:shadow-brand-brown/10 transition-all duration-500 hover:-translate-y-1 h-full flex flex-col block">
+    <Link to={`/itinerary/${id}`} className="group bg-white rounded-[24px] border border-brand-brown/5 overflow-hidden hover:shadow-xl hover:shadow-brand-brown/10 transition-all duration-500 hover:-translate-y-1 h-full flex flex-col block">
       <div className={`${isFeatured ? 'h-64 sm:h-80 md:h-[300px]' : 'h-48'} bg-brand-brown/5 relative overflow-hidden shrink-0`}>
         <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/40 to-brand-brown/40 group-hover:scale-110 transition-transform duration-700"></div>
         <div className="absolute top-4 left-4 flex gap-2">

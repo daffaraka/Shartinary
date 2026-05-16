@@ -1,22 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default function CountryModal({ isOpen, onClose, title, children }) {
+export default function CountryModal({ isOpen, onClose, title, children, className = "max-w-md" }) {
     if (!isOpen) return null;
 
     return ReactDOM.createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
             {/* Overlay */}
-            <div 
-                className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" 
+            <div
+                className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
                 onClick={onClose}
             ></div>
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all animate-fade-in-up">
+            <div className={`relative bg-white rounded-3xl shadow-2xl w-full overflow-hidden transform transition-all animate-fade-in-up ${className}`}>
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                     <h3 className="text-lg font-bold text-gray-800">{title}</h3>
-                    <button 
+                    <button
                         onClick={onClose}
                         className="text-gray-400 hover:text-gray-600 transition-colors"
                     >

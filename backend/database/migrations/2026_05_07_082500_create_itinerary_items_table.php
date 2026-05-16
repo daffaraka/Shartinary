@@ -13,7 +13,16 @@ return new class extends Migration
     {
         Schema::create('itinerary_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('itinerary_day_id')->constrained()->onDelete('cascade');
+            $table->foreignId('place_id')->constrained()->onDelete('cascade');
+            $table->time('time_start')->nullable();
+            $table->time('time_end')->nullable();
+            $table->integer('estimated_cost')->nullable();
+            $table->integer('order');
+            $table->text('note')->nullable();
             $table->timestamps();
+
+            $table->unique(['itinerary_day_id', 'order']);
         });
     }
 

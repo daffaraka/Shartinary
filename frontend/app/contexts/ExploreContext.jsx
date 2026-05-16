@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { getCategories, getTags, searchPlaces } from "../api/explore.api";
+import { itineraryApi } from "../api/itinerary.api";
 
 const ExploreContext = createContext();
 
@@ -7,7 +8,9 @@ export function ExploreProvider({ children }) {
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
     const [places, setPlaces] = useState([]);
+    const [itineraries, setItineraries] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [exploreType, setExploreType] = useState("itinerary"); // 'place' or 'itinerary'
     
     // Filter States
     const [filters, setFilters] = useState({
@@ -41,10 +44,15 @@ export function ExploreProvider({ children }) {
         setLoading(true);
         try {
             const searchParams = customFilters || filters;
-            const res = await searchPlaces(searchParams);
-            setPlaces(res.data.data);
+            if (exploreType === "place") {
+                const res = await searchPlaces(searchParams);
+                setPlaces(res.data.data);
+            } else {
+                const res = await itineraryApi.getAll(searchParams);
+                setItineraries(res.data.data);
+            }
         } catch (err) {
-            console.error("Gagal mencari tempat", err);
+            console.error(`Gagal mencari ${exploreType}`, err);
         } finally {
             setLoading(false);
         }
@@ -70,7 +78,10 @@ export function ExploreProvider({ children }) {
             categories,
             tags,
             places,
+            itineraries,
             loading,
+            exploreType,
+            setExploreType,
             filters,
             updateFilters,
             resetFilters,

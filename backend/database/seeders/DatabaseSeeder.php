@@ -50,6 +50,9 @@ class DatabaseSeeder extends Seeder
         );
         $user->assignRole('user');
 
+        // 7. Seed Itineraries
+        $this->call(ItinerarySeeder::class);
+
         $this->command->info('Seed selesai! Admin: admin@shartinary.com | User: user@shartinary.com (password: password)');
     }
 }

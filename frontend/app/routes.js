@@ -1,5 +1,4 @@
 import { index, route } from "@react-router/dev/routes";
-import { index, route } from "@react-router/dev/routes";
 
 export default [
     index("routes/home.jsx"),
@@ -15,8 +14,9 @@ export default [
         route("categories", "routes/admin.categories.jsx"),
         route("tags", "routes/admin.tags.jsx"),
         route("places", "routes/admin.places.jsx"),
+        route("itineraries", "routes/admin.itineraries.jsx"),
     ]),
-    
+
     // Auth Routes
     route("login", "routes/login.jsx"),
     route("register", "routes/register.jsx"),

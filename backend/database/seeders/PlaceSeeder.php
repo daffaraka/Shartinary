@@ -87,8 +87,11 @@ class PlaceSeeder extends Seeder
                 $placeData['city_id'] = $jakarta->id;
 
                 $place = Place::firstOrCreate(
-                    ['name' => $placeData['name'], 'city_id' => $jakarta->id],
-                    $placeData
+                    ['name' => $placeData['name'], 'city_id' => $placeData['city_id']],
+                    array_merge($placeData, [
+                        'price_range' => 'Medium',
+                        'icon' => 'lucide:map-pin'
+                    ])
                 );
 
                 $tagIds = collect($tags)->map(fn($slug) => $tagsMap[$slug]->id)->toArray();
@@ -139,8 +142,11 @@ class PlaceSeeder extends Seeder
                 $placeData['city_id'] = $bandung->id;
 
                 $place = Place::firstOrCreate(
-                    ['name' => $placeData['name'], 'city_id' => $bandung->id],
-                    $placeData
+                    ['name' => $placeData['name'], 'city_id' => $placeData['city_id']],
+                    array_merge($placeData, [
+                        'price_range' => 'Medium',
+                        'icon' => 'lucide:map-pin'
+                    ])
                 );
 
                 $tagIds = collect($tags)->map(fn($slug) => $tagsMap[$slug]->id)->toArray();
@@ -199,8 +205,11 @@ class PlaceSeeder extends Seeder
                 $placeData['city_id'] = $bali->id;
 
                 $place = Place::firstOrCreate(
-                    ['name' => $placeData['name'], 'city_id' => $bali->id],
-                    $placeData
+                    ['name' => $placeData['name'], 'city_id' => $placeData['city_id']],
+                    array_merge($placeData, [
+                        'price_range' => 'Medium',
+                        'icon' => 'lucide:map-pin'
+                    ])
                 );
 
                 $tagIds = collect($tags)->map(fn($slug) => $tagsMap[$slug]->id)->toArray();
@@ -251,8 +260,11 @@ class PlaceSeeder extends Seeder
                 $placeData['city_id'] = $singapore->id;
 
                 $place = Place::firstOrCreate(
-                    ['name' => $placeData['name'], 'city_id' => $singapore->id],
-                    $placeData
+                    ['name' => $placeData['name'], 'city_id' => $placeData['city_id']],
+                    array_merge($placeData, [
+                        'price_range' => 'Medium',
+                        'icon' => 'lucide:map-pin'
+                    ])
                 );
 
                 $tagIds = collect($tags)->map(fn($slug) => $tagsMap[$slug]->id)->toArray();
@@ -303,8 +315,11 @@ class PlaceSeeder extends Seeder
                 $placeData['city_id'] = $bangkok->id;
 
                 $place = Place::firstOrCreate(
-                    ['name' => $placeData['name'], 'city_id' => $bangkok->id],
-                    $placeData
+                    ['name' => $placeData['name'], 'city_id' => $placeData['city_id']],
+                    array_merge($placeData, [
+                        'price_range' => 'Medium',
+                        'icon' => 'lucide:map-pin'
+                    ])
                 );
 
                 $tagIds = collect($tags)->map(fn($slug) => $tagsMap[$slug]->id)->toArray();
@@ -355,8 +370,11 @@ class PlaceSeeder extends Seeder
                 $placeData['city_id'] = $kualaLumpur->id;
 
                 $place = Place::firstOrCreate(
-                    ['name' => $placeData['name'], 'city_id' => $kualaLumpur->id],
-                    $placeData
+                    ['name' => $placeData['name'], 'city_id' => $placeData['city_id']],
+                    array_merge($placeData, [
+                        'price_range' => 'Medium',
+                        'icon' => 'lucide:map-pin'
+                    ])
                 );
 
                 $tagIds = collect($tags)->map(fn($slug) => $tagsMap[$slug]->id)->toArray();
